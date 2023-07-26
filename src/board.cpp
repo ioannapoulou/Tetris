@@ -5,7 +5,7 @@
 
 Board::Board()
 {
-
+    score=0;
     b = new int*[16];
     for (int i = 0; i < 16; i++) {
         b[i] = new int[16];
@@ -231,6 +231,17 @@ int Board::get_pos2()
 int** Board::get_board()
 {
     return b;
+}
+
+
+int Board::get_score()
+{
+    return score;
+}
+
+void Board::increase_score(int number)
+{
+    score=score+number;
 }
 
 

@@ -37,7 +37,7 @@ Game::Game(int Width,int Height,int BoardSize)
     while (!WindowShouldClose()) {
         if(CreateNew==0)
         {
-            number=rand()% 5 +1;
+            number=1;
             board.create_shape(number);
             CreateNew=1;
         }
@@ -67,40 +67,51 @@ Game::Game(int Width,int Height,int BoardSize)
         BeginDrawing();
         ClearBackground(RAYWHITE);
         // Draw the board
+        bool all_line;
         for (int y = 0; y < BoardSize; y++) {
+            all_line=true;
             for (int x = 0; x < BoardSize; x++) {
                 // Alternate colors for each tile
                 // Draw the tile
-                
+                DrawText(TextFormat("Score: %d", board.get_score()), 0, 0, 40, DARKGRAY);
                 if(board.get_board()[y][x]==0)
                 {
-                    DrawRectangle(x * 50, y * 50, 50, 50,BLACK);
-                    DrawRectangle(x * 50 +2, y * 50 +2, 46, 46,WHITE);
+                    DrawRectangle(x * 50, y * 50+50, 50, 50,BLACK);
+                    DrawRectangle(x * 50 +2, y * 50 +52, 46, 46,WHITE);
+                    all_line=false;
                 }
                 else if(board.get_board()[y][x]==1)
                 {
-                    DrawRectangle(x * 50, y * 50, 50, 50,BLACK);
-                    DrawRectangle(x * 50 +2, y * 50 +2, 46, 46,RED);
+                    DrawRectangle(x * 50, y * 50+50, 50, 50,BLACK);
+                    DrawRectangle(x * 50 +2, y * 50 +52, 46, 46,RED);
                 }
                 else if(board.get_board()[y][x]==2)
                 {
-                    DrawRectangle(x * 50, y * 50, 50, 50,BLACK);
-                    DrawRectangle(x * 50 +2, y * 50 +2, 46, 46,GREEN);
+                    DrawRectangle(x * 50, y * 50+50, 50, 50,BLACK);
+                    DrawRectangle(x * 50 +2, y * 50 +52, 46, 46,GREEN);
                 }
                 else if(board.get_board()[y][x]==3)
                 {
-                    DrawRectangle(x * 50, y * 50, 50, 50,BLACK);
-                    DrawRectangle(x * 50 +2, y * 50 +2, 46, 46,BLUE);
+                    DrawRectangle(x * 50, y * 50+50, 50, 50,BLACK);
+                    DrawRectangle(x * 50 +2, y * 50 +52, 46, 46,BLUE);
                 }
                 else if(board.get_board()[y][x]==4)
                 {
-                    DrawRectangle(x * 50, y * 50, 50, 50,BLACK);
-                    DrawRectangle(x * 50 +2, y * 50 +2, 46, 46,YELLOW);
+                    DrawRectangle(x * 50, y * 50+50, 50, 50,BLACK);
+                    DrawRectangle(x * 50 +2, y * 50 +52, 46, 46,YELLOW);
                 }
                 else if(board.get_board()[y][x]==5)
                 {
-                    DrawRectangle(x * 50, y * 50, 50, 50,BLACK);
-                    DrawRectangle(x * 50 +2, y * 50 +2, 46, 46,PURPLE);
+                    DrawRectangle(x * 50, y * 50+50, 50, 50,BLACK);
+                    DrawRectangle(x * 50 +2, y * 50 +52, 46, 46,PURPLE);
+                }
+            }
+            if(all_line==true)
+            {
+                board.increase_score(100);
+                for (int x = 0; x < BoardSize; x++)
+                {
+                board.get_board()[y][x]=0;
                 }
             }
         }
@@ -111,7 +122,7 @@ Game::Game(int Width,int Height,int BoardSize)
         }
         else
         {
-            WaitTime(1.0);
+            WaitTime(0.5);
         }
     }
 
