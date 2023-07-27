@@ -14,4 +14,5 @@ class Board
         int move_down(int color);
         void move_right(int color);
         void move_left(int color);
+        void set_board(int pos1,int pos2,int value);
 };

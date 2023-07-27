@@ -17,10 +17,7 @@ Board::Board()
         {
             b[i][j]=0;
         }
-    } 
-
-    
-    
+    }   
 }
 
 void Board::create_shape(int color)
@@ -242,6 +239,11 @@ int Board::get_score()
 void Board::increase_score(int number)
 {
     score=score+number;
+}
+
+void Board::set_board(int pos1,int pos2,int value)
+{
+    b[pos1][pos2]=value;
 }
 
 

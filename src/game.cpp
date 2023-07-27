@@ -35,6 +35,7 @@ Game::Game(int Width,int Height,int BoardSize)
     int CreateNew=0;
     int number;
     while (!WindowShouldClose()) {
+        int result=0;
         if(CreateNew==0)
         {
             number=1;
@@ -43,7 +44,7 @@ Game::Game(int Width,int Height,int BoardSize)
         }
         else if(CreateNew==1)
         {
-            int result=board.move_down(number);
+            result=board.move_down(number);
             if((board.get_pos1()>=15 and number==Straight) or (number==Square and board.get_pos1()>=14) or (number==L and board.get_pos1()>=13) or (number==T and board.get_pos1()>=14) or (number==SandZ and board.get_pos1()>=13))
             {
                 CreateNew=0;
@@ -78,7 +79,6 @@ Game::Game(int Width,int Height,int BoardSize)
                 {
                     DrawRectangle(x * 50, y * 50+50, 50, 50,BLACK);
                     DrawRectangle(x * 50 +2, y * 50 +52, 46, 46,WHITE);
-                    all_line=false;
                 }
                 else if(board.get_board()[y][x]==1)
                 {
@@ -105,16 +105,21 @@ Game::Game(int Width,int Height,int BoardSize)
                     DrawRectangle(x * 50, y * 50+50, 50, 50,BLACK);
                     DrawRectangle(x * 50 +2, y * 50 +52, 46, 46,PURPLE);
                 }
-            }
-            if(all_line==true)
-            {
-                board.increase_score(100);
-                for (int x = 0; x < BoardSize; x++)
+                if((x!=0 and board.get_board()[y][x]!=board.get_board()[y][x-1]) or (board.get_board()[y][x]==0))
                 {
-                board.get_board()[y][x]=0;
+                    all_line=false;
                 }
             }
+            if(all_line==true and CreateNew==0)
+            {
+                for(int x=0;x<BoardSize;x++)
+                {
+                    board.set_board(y,x,0);
+                }
+                board.increase_score(100);
+            }
         }
+
         EndDrawing();
         if (IsKeyDown(KEY_DOWN))
         {
