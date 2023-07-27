@@ -3,17 +3,17 @@
 #include "util.hpp"
 #include <iostream>
 
-Board::Board()
+Board::Board(int width,int height)
 {
     score=0;
-    b = new int*[16];
-    for (int i = 0; i < 16; i++) {
-        b[i] = new int[16];
+    b = new int*[height];
+    for (int i = 0; i < height; i++) {
+        b[i] = new int[width];
     }
 
-    for (int i=0;i<=15;i++)
+    for (int i=0;i<height;i++)
     {
-        for (int j=0;j<=15;j++)
+        for (int j=0;j<width;j++)
         {
             b[i][j]=0;
         }

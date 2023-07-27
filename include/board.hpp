@@ -4,7 +4,7 @@ class Board
     int**b;
     int score;
     public:
-        Board();
+        Board(int width,int height);
         int get_score();
         void increase_score(int number);
         int get_pos1();

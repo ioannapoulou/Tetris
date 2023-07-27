@@ -6,7 +6,7 @@ using namespace std;
 
 int main(void)
 {
-    Game game(400,400,16);
+    Game game(400,400,10,16);
 
 }
 

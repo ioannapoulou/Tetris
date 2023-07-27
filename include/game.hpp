@@ -3,5 +3,5 @@
 class Game
 {
     public:
-        Game(int Width,int Height,int BoardSize);
+        Game(int Width,int Height,int Board_width,int Board_height);
 };
