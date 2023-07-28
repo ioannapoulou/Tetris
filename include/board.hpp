@@ -1,3 +1,8 @@
+#ifndef BOARDGAME 
+#define BOARDGAME
+
+
+
 class Board
 {
     int pos1,pos2;
@@ -16,3 +21,5 @@ class Board
         void move_left(int color);
         void set_board(int pos1,int pos2,int value);
 };
+
+#endif
