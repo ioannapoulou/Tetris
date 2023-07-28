@@ -16,10 +16,12 @@ int main(void)
     InitWindow(400,400, "Tetris");
     SetTargetFPS(60);
     Board b(10,16);
+    int result=Update(b,10,16,1);
+    Draw(b,10,16,result);
     while (!WindowShouldClose()) 
     {
-        Update(b,10,16);
-        Draw(b,10,16);
+        result=Update(b,10,16,0);
+        Draw(b,10,16,result);
     }
 
     // De-Initialization
