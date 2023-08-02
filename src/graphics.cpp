@@ -19,7 +19,8 @@ void Draw(Board& board,int Board_width,int Board_height,int CreateNew)
     ClearBackground(RAYWHITE);
     for (int y = 0; y < Board_height; y++) {
         all_line=true;
-        for (int x = 0; x < Board_width; x++) {
+        for (int x = 0; x < Board_width; x++) 
+        {
             DrawText(TextFormat("Score: %d", board.get_score()), 0, 0, 40, DARKGRAY);
             if(board.get_board()[y][x]==0)
             {
@@ -58,9 +59,12 @@ void Draw(Board& board,int Board_width,int Board_height,int CreateNew)
         }
         if(all_line==true and CreateNew==0)
         {
-            for(int x=0;x<Board_width;x++)
+            for(int y2=y;y2>=1;y2--)
             {
-                board.set_board(y,x,0);
+                for (int x2=0;x2<Board_width;x2++)
+                {
+                    board.set_board(y2,x2,board.get_board()[y2-1][x2]);
+                }
             }
             board.increase_score(100);
         }
