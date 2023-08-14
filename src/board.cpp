@@ -71,53 +71,80 @@ void Board::create_shape(int color)
 }
 
 
+int** fill(int** b,int c,int a1=-1,int b1=-1,int c1=-1,int d1=-1,int a2=-1,int b2=-1,int c2=-1,int d2=-1)
+{
+    if(a1!=-1)
+    {
+        b[a1][a2]=c;
+    }
+    if(b1!=-1)
+    {
+        b[b1][b2]=c;
+    }
+    if(c1!=-1)
+    {
+        b[c1][c2]=c;
+    }
+    if(d1!=-1)
+    {
+        b[d1][d2]=c;
+    }
+    return b;
+}
+
+int** un_fill(int** b,int a1=-1,int b1=-1,int c1=-1,int d1=-1,int a2=-1,int b2=-1,int c2=-1,int d2=-1)
+{
+    if(a1!=-1)
+    {
+        b[a1][a2]=0;
+    }
+    if(b1!=-1)
+    {
+        b[b1][b2]=0;
+    }
+    if(c1!=-1)
+    {
+        b[c1][c2]=0;
+    }
+    if(d1!=-1)
+    {
+        b[d1][d2]=0;
+    }
+    return b;
+}
+
+
 int Board::move_down(int color)
 {
     if(color==Straight and b[pos1+1][pos2]==0 and b[pos1+1][pos2+1]==0 and  b[pos1+1][pos2+2]==0 and b[pos1+1][pos2+3]==0)
     {
-        b[pos1][pos2]=0;
-        b[pos1][pos2+1]=0;
-        b[pos1][pos2+2]=0;
-        b[pos1][pos2+3]=0;
-        b[pos1+1][pos2+1]=color;
-        b[pos1+1][pos2+2]=color;
-        b[pos1+1][pos2+3]=color;
-        b[pos1+1][pos2]=color;
+        b=fill(b,color,pos1+1,pos1+1,pos1+1,pos1+1,pos2,pos2+1,pos2+2,pos2+3);
+        b=un_fill(b,pos1,pos1,pos1,pos1,pos2,pos2+1,pos2+2,pos2+3);
         pos1=pos1+1;
     }
     else if(color==Square and b[pos1+2][pos2]==0 and b[pos1+2][pos2+1]==0)
     {
-        b[pos1][pos2]=0;
-        b[pos1][pos2+1]=0;
-        b[pos1+2][pos2]=color;
-        b[pos1+2][pos2+1]=color;
+        b=un_fill(b,pos1,pos1,-1,-1,pos2,pos2+1);
+        b=fill(b,color,pos1+2,pos1+2,-1,-1,pos2,pos2+1);
         pos1=pos1+1;
 
     }
     else if(color==T and b[pos1+1][pos2]==0 and b[pos1+1][pos2+2]==0 and b[pos1+2][pos2+1]==0)
     {
-        b[pos1][pos2]=0;
-        b[pos1][pos2+1]=0;
-        b[pos1][pos2+2]=0;
-        b[pos1+1][pos2]=color;
-        b[pos1+1][pos2+2]=color;
-        b[pos1+2][pos2+1]=color;
+        b=un_fill(b,pos1,pos1,pos1,-1,pos2,pos2+1,pos2+2);
+        b=fill(b,color,pos1+1,pos1+1,pos1+2,-1,pos2,pos2+2,pos2+1);
         pos1=pos1+1;
     }
     else if(color==L and b[pos1+3][pos2]==0 and b[pos1+3][pos2+1]==0)
     {
-        b[pos1][pos2]=0;
-        b[pos1+2][pos2+1]=0;
-        b[pos1+3][pos2]=color;
-        b[pos1+3][pos2+1]=color;
+        b=un_fill(b,pos1,pos1+2,-1,-1,pos2,pos2+1);
+        b=fill(b,color,pos1+3,pos1+3,-1,-1,pos2,pos2+1);
         pos1=pos1+1;
     }
     else if(color==SandZ and b[pos1+2][pos2]==0 and b[pos1+3][pos2+1]==0)
     {
-        b[pos1][pos2]=0;
-        b[pos1+1][pos2+1]=0;
-        b[pos1+2][pos2]=color;
-        b[pos1+3][pos2+1]=color;
+        b=un_fill(b,pos1,pos1+1,-1,-1,pos2,pos2+1);
+        b=fill(b,color,pos1+2,pos1+3,-1,-1,pos2,pos2+1);
         pos1=pos1+1;
     }
     else
@@ -132,40 +159,28 @@ void Board::move_right(int color)
 {
     if(color==Straight and b[pos1][pos2+4]==0)
     {
-        b[pos1][pos2]=0;
-        b[pos1][pos2+4]=color;
+        b=un_fill(b,pos1,-1,-1,-1,pos2);
+        b=fill(b,color,pos1,-1,-1,-1,pos2+4);
     }
     else if(color==Square and b[pos1+1][pos2+2]==0 and b[pos1][pos2+2]==0)
     {
-        b[pos1][pos2]=0;
-        b[pos1+1][pos2]=0;
-        b[pos1][pos2+2]=color;
-        b[pos1+1][pos2+2]=color;
+        b=un_fill(b,pos1,pos1+1,-1,-1,pos2,pos2);
+        b=fill(b,color,pos1,pos1+1,-1,-1,pos2+2,pos2+2);
     }
     else if(color==T and b[pos1][pos2+3]==0 and b[pos1+1][pos2+2]==0 )
     {
-        b[pos1][pos2]=0;
-        b[pos1+1][pos2+1]=0;
-        b[pos1+1][pos2+2]=color;
-        b[pos1][pos2+3]=color;
+        b=un_fill(b,pos1,pos1+1,-1,-1,pos2,pos2+1);
+        b=fill(b,color,pos1+1,pos1,-1,-1,pos2+2,pos2+3);
     }
     else if(color==L and b[pos1][pos2+1]==0 and b[pos1+1][pos2+1]==0 and b[pos1+2][pos2+2]==0)
     {
-        b[pos1][pos2]=0;
-        b[pos1+1][pos2]=0;
-        b[pos1+2][pos2]=0;
-        b[pos1][pos2+1]=color;
-        b[pos1+1][pos2+1]=color;
-        b[pos1+2][pos2+2]=color;
+        b=un_fill(b,pos1,pos1+1,pos1+2,-1,pos2,pos2,pos2);
+        b=fill(b,color,pos1,pos1+1,pos1+2,-1,pos2+1,pos2+1,pos2+2);
     }
     else if(color==SandZ and b[pos1][pos2+1]==0 and b[pos1+1][pos2+2]==0 and b[pos1+2][pos2+2]==0)
     {
-        b[pos1][pos2]=0;
-        b[pos1+1][pos2]=0;
-        b[pos1+2][pos2+1]=0;
-        b[pos1][pos2+1]=color;
-        b[pos1+1][pos2+2]=color;
-        b[pos1+2][pos2+2]=color;
+        b=un_fill(b,pos1,pos1+1,pos1+2,-1,pos2,pos2,pos2+1);
+        b=fill(b,color,pos1,pos1+1,pos1+2,-1,pos2+1,pos2+2,pos2+2);
     }
     pos2=pos2+1;
 }
@@ -175,40 +190,28 @@ void Board::move_left(int color)
 {
     if(color==Straight and b[pos1][pos2-1]==0)
     {
-        b[pos1][pos2+3]=0;
-        b[pos1][pos2-1]=color;
+        b=un_fill(b,pos1,-1,-1,-1,pos2+3);
+        b=fill(b,color,pos1,-1,-1,-1,pos2-1);
     }
     else if(color==Square and b[pos1][pos2-1]==0 and b[pos1+1][pos2-1]==0)
     {
-        b[pos1][pos2+1]=0;
-        b[pos1+1][pos2+1]=0;
-        b[pos1][pos2-1]=color;
-        b[pos1+1][pos2-1]=color;
+        b=un_fill(b,pos1,pos1+1,-1,-1,pos2+1,pos2+1);
+        b=fill(b,color,pos1,pos1+1,-1,-1,pos2-1,pos2-1);
     }
     else if(color==T and b[pos1][pos2-1]==0 and b[pos1+1][pos2]==0)
     {
-        b[pos1][pos2+2]=0;
-        b[pos1+1][pos2+1]=0;
-        b[pos1][pos2-1]=color;
-        b[pos1+1][pos2]=color;
+        b=un_fill(b,pos1,pos1+1,-1,-1,pos2+2,pos2+1);
+        b=fill(b,color,pos1,pos1+1,-1,-1,pos2-1,pos2);
     }
     else if(color==L and b[pos1][pos2-1]==0 and b[pos1+1][pos2-1]==0 and b[pos1+2][pos2-1]==0)
     {
-        b[pos1][pos2]=0;
-        b[pos1+1][pos2]=0;
-        b[pos1+2][pos2+1]=0;
-        b[pos1][pos2-1]=color;
-        b[pos1+1][pos2-1]=color;
-        b[pos1+2][pos2-1]=color;
+        b=un_fill(b,pos1,pos1+1,pos1+2,-1,pos2,pos2,pos2+1);
+        b=fill(b,color,pos1,pos1+1,pos1+2,-1,pos2-1,pos2-1,pos2-1);
     }
     else if(color==SandZ and b[pos1][pos2-1]==0 and b[pos1+1][pos2-1]==0 and b[pos1+2][pos2]==0)
     {
-        b[pos1][pos2]=0;
-        b[pos1+1][pos2+1]=0;
-        b[pos1+2][pos2+1]=0;
-        b[pos1][pos2-1]=color;
-        b[pos1+1][pos2-1]=color;
-        b[pos1+2][pos2]=color;
+        b=un_fill(b,pos1,pos1+1,pos1+2,-1,pos2,pos2+1,pos2+1);
+        b=fill(b,color,pos1,pos1+1,pos1+2,-1,pos2-1,pos2-1,pos2);
     }
     pos2=pos2-1;
 }
@@ -245,5 +248,7 @@ void Board::set_board(int pos1,int pos2,int value)
 {
     b[pos1][pos2]=value;
 }
+
+
 
 
