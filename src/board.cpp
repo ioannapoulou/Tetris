@@ -2,6 +2,11 @@
 #include "raylib.h"
 #include "util.hpp"
 #include <iostream>
+#include <vector>
+#include<algorithm>
+
+using namespace std;
+
 
 Board::Board(int width,int height)
 {
@@ -17,15 +22,18 @@ Board::Board(int width,int height)
         {
             b[i][j]=0;
         }
-    }   
+    }  
+ 
 }
 
 void Board::create_shape(int color)
 {
     if(color==Straight and b[0][2]==0 and b[0][3]==0 and  b[0][4]==0 and b[0][5]==0)
     {
-        pos1=0;
-        pos2=2;
+        posa= make_tuple(0,2);
+        posb= make_tuple(0,3);
+        posc= make_tuple(0,4);
+        posd= make_tuple(0,5);
         b[0][2]=Straight;
         b[0][3]=Straight;
         b[0][4]=Straight;
@@ -33,8 +41,10 @@ void Board::create_shape(int color)
     }
     else if(color==Square and b[0][3]==0 and b[1][4]==0 and b[1][3]==0 and b[0][4]==0)
     {
-        pos1=0;
-        pos2=3;
+        posa= make_tuple(0,3);
+        posb= make_tuple(1,4);
+        posc= make_tuple(1,3);
+        posd= make_tuple(0,4);
         b[0][3]=Square;
         b[1][4]=Square;
         b[1][3]=Square;
@@ -43,8 +53,10 @@ void Board::create_shape(int color)
     }
     else if(color==T and b[0][2]==0 and b[0][3]==0 and b[0][4]==0 and b[1][3]==0)
     {
-        pos1=0;
-        pos2=2;
+        posa= make_tuple(0,2);
+        posb= make_tuple(0,3);
+        posc= make_tuple(0,4);
+        posd= make_tuple(1,3);
         b[0][2]=T;
         b[0][3]=T;
         b[0][4]=T;
@@ -52,8 +64,10 @@ void Board::create_shape(int color)
     }
     else if(color==L and b[0][2]==0 and b[1][2]==0 and b[2][2]==0 and b[2][3]==0)
     {
-        pos1=0;
-        pos2=2;
+        posa= make_tuple(0,2);
+        posb= make_tuple(1,2);
+        posc= make_tuple(2,3);
+        posd= make_tuple(2,2);
         b[0][2]=L;
         b[1][2]=L;
         b[2][3]=L;
@@ -61,8 +75,10 @@ void Board::create_shape(int color)
     }
     else if(color==SandZ and b[0][2]==0 and b[1][2]==0 and b[1][3]==0 and b[2][3]==0)
     {
-        pos1=0;
-        pos2=2;
+        posa= make_tuple(0,2);
+        posb= make_tuple(1,2);
+        posc= make_tuple(1,3);
+        posd= make_tuple(2,3);
         b[0][2]=SandZ;
         b[1][2]=SandZ;
         b[1][3]=SandZ;
@@ -71,160 +87,223 @@ void Board::create_shape(int color)
 }
 
 
-int** fill(int** b,int c,int a1=-1,int b1=-1,int c1=-1,int d1=-1,int a2=-1,int b2=-1,int c2=-1,int d2=-1)
-{
-    if(a1!=-1)
-    {
-        b[a1][a2]=c;
-    }
-    if(b1!=-1)
-    {
-        b[b1][b2]=c;
-    }
-    if(c1!=-1)
-    {
-        b[c1][c2]=c;
-    }
-    if(d1!=-1)
-    {
-        b[d1][d2]=c;
-    }
-    return b;
-}
+// int** fill(int** b,int c,int a1=-1,int b1=-1,int c1=-1,int d1=-1,int a2=-1,int b2=-1,int c2=-1,int d2=-1)
+// {
+//     if(a1!=-1)
+//     {
+//         b[a1][a2]=c;
+//     }
+//     if(b1!=-1)
+//     {
+//         b[b1][b2]=c;
+//     }
+//     if(c1!=-1)
+//     {
+//         b[c1][c2]=c;
+//     }
+//     if(d1!=-1)
+//     {
+//         b[d1][d2]=c;
+//     }
+//     return b;
+// }
 
-int** un_fill(int** b,int a1=-1,int b1=-1,int c1=-1,int d1=-1,int a2=-1,int b2=-1,int c2=-1,int d2=-1)
-{
-    if(a1!=-1)
-    {
-        b[a1][a2]=0;
-    }
-    if(b1!=-1)
-    {
-        b[b1][b2]=0;
-    }
-    if(c1!=-1)
-    {
-        b[c1][c2]=0;
-    }
-    if(d1!=-1)
-    {
-        b[d1][d2]=0;
-    }
-    return b;
-}
+// int** un_fill(int** b,int a1=-1,int b1=-1,int c1=-1,int d1=-1,int a2=-1,int b2=-1,int c2=-1,int d2=-1)
+// {
+//     if(a1!=-1)
+//     {
+//         b[a1][a2]=0;
+//     }
+//     if(b1!=-1)
+//     {
+//         b[b1][b2]=0;
+//     }
+//     if(c1!=-1)
+//     {
+//         b[c1][c2]=0;
+//     }
+//     if(d1!=-1)
+//     {
+//         b[d1][d2]=0;
+//     }
+//     return b;
+// }
 
+bool sortdesc(const tuple<int, int>& a,
+              const tuple<int, int>& b)
+{
+    return (get<0>(a) > get<0>(b));
+}
 
 int Board::move_down(int color)
 {
-    if(color==Straight and b[pos1+1][pos2]==0 and b[pos1+1][pos2+1]==0 and  b[pos1+1][pos2+2]==0 and b[pos1+1][pos2+3]==0)
-    {
-        b=fill(b,color,pos1+1,pos1+1,pos1+1,pos1+1,pos2,pos2+1,pos2+2,pos2+3);
-        b=un_fill(b,pos1,pos1,pos1,pos1,pos2,pos2+1,pos2+2,pos2+3);
-        pos1=pos1+1;
-    }
-    else if(color==Square and b[pos1+2][pos2]==0 and b[pos1+2][pos2+1]==0)
-    {
-        b=un_fill(b,pos1,pos1,-1,-1,pos2,pos2+1);
-        b=fill(b,color,pos1+2,pos1+2,-1,-1,pos2,pos2+1);
-        pos1=pos1+1;
+    vector<tuple<int, int> > v;
+    v.push_back(posa);
+    v.push_back(posb);
+    v.push_back(posc);
+    v.push_back(posd);
 
-    }
-    else if(color==T and b[pos1+1][pos2]==0 and b[pos1+1][pos2+2]==0 and b[pos1+2][pos2+1]==0)
+    
+    bool flag=true;
+    for (int i = 0; i < 4; i++)
     {
-        b=un_fill(b,pos1,pos1,pos1,-1,pos2,pos2+1,pos2+2);
-        b=fill(b,color,pos1+1,pos1+1,pos1+2,-1,pos2,pos2+2,pos2+1);
-        pos1=pos1+1;
+
+        tuple <int, int> help_pos;
+        help_pos= make_tuple(get<0>(v[i])+1,get<01>(v[i]));
+
+        if( b[get<0>(v[i])+1] [get<01>(v[i])] !=0 and help_pos!=posa and help_pos!=posb and help_pos!=posc and help_pos!=posd)
+        {
+            flag=false;
+            return 1;  
+        }
     }
-    else if(color==L and b[pos1+3][pos2]==0 and b[pos1+3][pos2+1]==0)
+
+    tuple <int, int> help_tuple1,help_tuple2,help_tuple3,help_tuple4;
+
+    help_tuple1= make_tuple(get<0>(v[0])+1,get<01>(v[0]));
+    help_tuple2= make_tuple(get<0>(v[1])+1,get<01>(v[1]));
+    help_tuple3= make_tuple(get<0>(v[2])+1,get<01>(v[2]));
+    help_tuple4= make_tuple(get<0>(v[3])+1,get<01>(v[3]));
+
+    posa=help_tuple1;
+    posb=help_tuple2;
+    posc=help_tuple3;
+    posd=help_tuple4;
+
+    sort(v.begin(), v.end(), sortdesc);
+    if(flag==true)
     {
-        b=un_fill(b,pos1,pos1+2,-1,-1,pos2,pos2+1);
-        b=fill(b,color,pos1+3,pos1+3,-1,-1,pos2,pos2+1);
-        pos1=pos1+1;
+        for (int i = 0; i < 4; i++)
+        {
+            b[get<0>(v[i])+1] [get<01>(v[i])]=color;
+            b[get<0>(v[i])] [get<01>(v[i])]=0;
+        }
     }
-    else if(color==SandZ and b[pos1+2][pos2]==0 and b[pos1+3][pos2+1]==0)
-    {
-        b=un_fill(b,pos1,pos1+1,-1,-1,pos2,pos2+1);
-        b=fill(b,color,pos1+2,pos1+3,-1,-1,pos2,pos2+1);
-        pos1=pos1+1;
-    }
-    else
-    {
-        return 1;
-    }
-    return 0;
+
+    return 0;    
 }
 
-
-void Board::move_right(int color)
+bool sortbysec(const tuple<int, int>& a,
+               const tuple<int, int>& b)
 {
-    if(color==Straight and b[pos1][pos2+4]==0)
-    {
-        b=un_fill(b,pos1,-1,-1,-1,pos2);
-        b=fill(b,color,pos1,-1,-1,-1,pos2+4);
-    }
-    else if(color==Square and b[pos1+1][pos2+2]==0 and b[pos1][pos2+2]==0)
-    {
-        b=un_fill(b,pos1,pos1+1,-1,-1,pos2,pos2);
-        b=fill(b,color,pos1,pos1+1,-1,-1,pos2+2,pos2+2);
-    }
-    else if(color==T and b[pos1][pos2+3]==0 and b[pos1+1][pos2+2]==0 )
-    {
-        b=un_fill(b,pos1,pos1+1,-1,-1,pos2,pos2+1);
-        b=fill(b,color,pos1+1,pos1,-1,-1,pos2+2,pos2+3);
-    }
-    else if(color==L and b[pos1][pos2+1]==0 and b[pos1+1][pos2+1]==0 and b[pos1+2][pos2+2]==0)
-    {
-        b=un_fill(b,pos1,pos1+1,pos1+2,-1,pos2,pos2,pos2);
-        b=fill(b,color,pos1,pos1+1,pos1+2,-1,pos2+1,pos2+1,pos2+2);
-    }
-    else if(color==SandZ and b[pos1][pos2+1]==0 and b[pos1+1][pos2+2]==0 and b[pos1+2][pos2+2]==0)
-    {
-        b=un_fill(b,pos1,pos1+1,pos1+2,-1,pos2,pos2,pos2+1);
-        b=fill(b,color,pos1,pos1+1,pos1+2,-1,pos2+1,pos2+2,pos2+2);
-    }
-    pos2=pos2+1;
+    return (get<1>(a) > get<1>(b));
 }
 
+void Board::move_right(int color,int form)
+{
+    vector<tuple<int, int> > v;
+    v.push_back(posa);
+    v.push_back(posb);
+    v.push_back(posc);
+    v.push_back(posd);
+
+    
+    bool flag=true;
+    for (int i = 0; i < 4; i++)
+    {
+
+        tuple <int, int> help_pos;
+        help_pos= make_tuple(get<0>(v[i]),get<01>(v[i])+1);
+
+        if( b[get<0>(v[i])] [get<01>(v[i])+1] !=0 and help_pos!=posa and help_pos!=posb and help_pos!=posc and help_pos!=posd)
+        {
+            flag=false;  
+        }
+    }
+
+    tuple <int, int> help_tuple1,help_tuple2,help_tuple3,help_tuple4;
+
+    help_tuple1= make_tuple(get<0>(v[0]),get<01>(v[0])+1);
+    help_tuple2= make_tuple(get<0>(v[1]),get<01>(v[1])+1);
+    help_tuple3= make_tuple(get<0>(v[2]),get<01>(v[2])+1);
+    help_tuple4= make_tuple(get<0>(v[3]),get<01>(v[3])+1);
+
+    posa=help_tuple1;
+    posb=help_tuple2;
+    posc=help_tuple3;
+    posd=help_tuple4;
+
+    sort(v.begin(), v.end(), sortbysec);
+    if(flag==true)
+    {
+        for (int i = 0; i < 4; i++)
+        {
+            b[get<0>(v[i])] [get<01>(v[i])+1]=color;
+            b[get<0>(v[i])] [get<01>(v[i])]=0;
+        }
+    }
+
+    return ;    
+}
+
+bool sortbysecasc(const tuple<int, int>& a,
+               const tuple<int, int>& b)
+{
+    return (get<1>(a) < get<1>(b));
+}
 
 void Board::move_left(int color)
 {
-    if(color==Straight and b[pos1][pos2-1]==0)
+    vector<tuple<int, int> > v;
+    v.push_back(posa);
+    v.push_back(posb);
+    v.push_back(posc);
+    v.push_back(posd);
+
+    
+    bool flag=true;
+    for (int i = 0; i < 4; i++)
     {
-        b=un_fill(b,pos1,-1,-1,-1,pos2+3);
-        b=fill(b,color,pos1,-1,-1,-1,pos2-1);
+
+        tuple <int, int> help_pos;
+        help_pos= make_tuple(get<0>(v[i]),get<01>(v[i])-1);
+
+        if( b[get<0>(v[i])] [get<01>(v[i])-1] !=0 and help_pos!=posa and help_pos!=posb and help_pos!=posc and help_pos!=posd)
+        {
+            flag=false;  
+        }
     }
-    else if(color==Square and b[pos1][pos2-1]==0 and b[pos1+1][pos2-1]==0)
+
+    tuple <int, int> help_tuple1,help_tuple2,help_tuple3,help_tuple4;
+
+    help_tuple1= make_tuple(get<0>(v[0]),get<01>(v[0])-1);
+    help_tuple2= make_tuple(get<0>(v[1]),get<01>(v[1])-1);
+    help_tuple3= make_tuple(get<0>(v[2]),get<01>(v[2])-1);
+    help_tuple4= make_tuple(get<0>(v[3]),get<01>(v[3])-1);
+
+    posa=help_tuple1;
+    posb=help_tuple2;
+    posc=help_tuple3;
+    posd=help_tuple4;
+
+    sort(v.begin(), v.end(), sortbysecasc);
+    if(flag==true)
     {
-        b=un_fill(b,pos1,pos1+1,-1,-1,pos2+1,pos2+1);
-        b=fill(b,color,pos1,pos1+1,-1,-1,pos2-1,pos2-1);
+        for (int i = 0; i < 4; i++)
+        {
+            b[get<0>(v[i])] [get<01>(v[i])-1]=color;
+            b[get<0>(v[i])] [get<01>(v[i])]=0;
+        }
     }
-    else if(color==T and b[pos1][pos2-1]==0 and b[pos1+1][pos2]==0)
-    {
-        b=un_fill(b,pos1,pos1+1,-1,-1,pos2+2,pos2+1);
-        b=fill(b,color,pos1,pos1+1,-1,-1,pos2-1,pos2);
-    }
-    else if(color==L and b[pos1][pos2-1]==0 and b[pos1+1][pos2-1]==0 and b[pos1+2][pos2-1]==0)
-    {
-        b=un_fill(b,pos1,pos1+1,pos1+2,-1,pos2,pos2,pos2+1);
-        b=fill(b,color,pos1,pos1+1,pos1+2,-1,pos2-1,pos2-1,pos2-1);
-    }
-    else if(color==SandZ and b[pos1][pos2-1]==0 and b[pos1+1][pos2-1]==0 and b[pos1+2][pos2]==0)
-    {
-        b=un_fill(b,pos1,pos1+1,pos1+2,-1,pos2,pos2+1,pos2+1);
-        b=fill(b,color,pos1,pos1+1,pos1+2,-1,pos2-1,pos2-1,pos2);
-    }
-    pos2=pos2-1;
+
+    return ;
+}
+
+
+void Board::move_up(int color)
+{
+    return;
 }
 
 
 int Board::get_pos1()
 {
-    return pos1;
+    return get<0>(posa);
 }
 
 int Board::get_pos2()
 {
-    return pos2;
+    return get<01>(posa);
 }
 
 

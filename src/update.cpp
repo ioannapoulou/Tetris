@@ -13,6 +13,8 @@ float timer;
 int right=0;
 int left=0;
 int down=0;
+int up=0;
+int form=0;
 
 
 Board func(Board b,int Board_width,int Board_height)
@@ -35,10 +37,14 @@ Board func(Board b,int Board_width,int Board_height)
                 CreateNew=0;
             }
         }
-
+        // if(up==1)
+        // {
+        //     b.move_up(number);
+        //     up=0;
+        // }
         if ((right==1) and ((b.get_pos2()+4<Board_width and number==Straight) or (number==Square and b.get_pos2()+2<Board_width) or (number==L and b.get_pos2()+2<Board_width) or (number==T and b.get_pos2()+3<Board_width) or (number==SandZ and b.get_pos2()+2<Board_width)))
         {
-            b.move_right(number);
+            b.move_right(number,form);
             right=0;
         }
         else if ((left==1) and b.get_pos2()-1>=0)
@@ -63,6 +69,10 @@ int Update(Board& b,int Board_width,int Board_height,int first_time)
     {
         down=1;
     }
+    // if(IsKeyPressed(KEY_UP))
+    // {
+    //     up=1;
+    // }
 
     timer=timer+GetFrameTime();
 
