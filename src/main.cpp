@@ -13,18 +13,23 @@ using namespace std;
 int main(void)
 {
     srand(time(NULL));
-    InitWindow(400,400, "Tetris");
-    SetTargetFPS(60);
-    Board b(10,16);
-    int result=Update(b,10,16,1);
-    Draw(b,10,16,result);
-    while (!WindowShouldClose()) 
+    InitWindow(800,1000, "Tetris");
+    int closed=DrawStartWindow(800,1000);
+    
+    if (closed==1)
     {
-        result=Update(b,10,16,0);
+        Board b(10,16);
+        SetTargetFPS(60);
+        int result=Update(b,10,16,1);
         Draw(b,10,16,result);
-    }
+        while (!WindowShouldClose()) 
+        {
+            result=Update(b,10,16,0);
+            Draw(b,10,16,result);
+        }
 
-    // De-Initialization
-    CloseWindow();
+        // De-Initialization
+        CloseWindow();
+    }
 }
 

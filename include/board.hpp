@@ -21,9 +21,9 @@ class Board
         int** get_board();
         void create_shape(int color);
         int move_down(int color);
-        void move_right(int color,int form);
+        void move_right(int color);
         void move_left(int color);
-        void move_up(int color);
+        int move_up(int color,int form);
         void set_board(int pos1,int pos2,int value);
 };
 
