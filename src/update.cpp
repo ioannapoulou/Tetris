@@ -9,6 +9,7 @@
 int CreateNew=0;
 int result=0;
 int number;
+int number2=-1;
 float timer;
 int right=0;
 int left=0;
@@ -22,7 +23,16 @@ Board func(Board b,int Board_width,int Board_height)
     if(CreateNew==0)
         {
             form=0;
-            number=5;
+            if(number2==-1)
+            {
+                number=rand() % 5 + 1;
+                number2=rand() % 5 + 1;
+            }
+            else 
+            {
+                number=number2;
+                number2=rand() % 5 + 1;
+            }
             b.create_shape(number);
             CreateNew=1;
         }
@@ -56,8 +66,9 @@ Board func(Board b,int Board_width,int Board_height)
         return b;   
 }
 
-int Update(Board& b,int Board_width,int Board_height,int first_time)
+int* Update(Board& b,int Board_width,int Board_height,int first_time)
 {   
+    int* result=new int[2];
     if(IsKeyPressed(KEY_RIGHT))
     {
         right=1;
@@ -95,7 +106,9 @@ int Update(Board& b,int Board_width,int Board_height,int first_time)
             timer=0;
         }
     }
-    return CreateNew;
+    result[0]=CreateNew;
+    result[1]=number2;
+    return result;
 }
 
 

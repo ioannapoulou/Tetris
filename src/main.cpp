@@ -20,12 +20,12 @@ int main(void)
     {
         Board b(10,16);
         SetTargetFPS(60);
-        int result=Update(b,10,16,1);
-        Draw(b,10,16,result);
+        int* result=Update(b,10,16,1);
+        Draw(b,10,16,result[0],result[1],800,1000);
         while (!WindowShouldClose()) 
         {
             result=Update(b,10,16,0);
-            Draw(b,10,16,result);
+            Draw(b,10,16,result[0],result[1],800,1000);
         }
 
         // De-Initialization
