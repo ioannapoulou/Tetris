@@ -8,7 +8,7 @@
 
 using namespace std;
 
-
+int paused=-1;
 
 int main(void)
 {
@@ -21,11 +21,18 @@ int main(void)
         Board b(10,16);
         SetTargetFPS(60);
         int* result=Update(b,10,16,1);
-        Draw(b,10,16,result[0],result[1],800,1000);
+        Draw(b,10,16,result[0],result[1],800,1000,-1);
         while (!WindowShouldClose()) 
         {
-            result=Update(b,10,16,0);
-            Draw(b,10,16,result[0],result[1],800,1000);
+            if(GetKeyPressed()==KEY_P)
+            {
+                paused=paused*(-1);
+            }
+            if(paused==-1)
+            {
+                result=Update(b,10,16,0);
+            }
+            Draw(b,10,16,result[0],result[1],800,1000,paused);
         }
 
         // De-Initialization

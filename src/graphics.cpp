@@ -9,8 +9,10 @@
 
 using namespace std;
 
+float PauseTimer=0;
+float LastTimePausedIsShowed=0;
 
-void Draw(Board& board,int Board_width,int Board_height,int CreateNew,int NumberNext,int width,int height)
+void Draw(Board& board,int Board_width,int Board_height,int CreateNew,int NumberNext,int width,int height,int paused)
 {    
     BeginDrawing();
     bool all_line;
@@ -116,11 +118,31 @@ void Draw(Board& board,int Board_width,int Board_height,int CreateNew,int Number
     }
     DrawText("Next Shape",650-MeasureText("Next Shape",25)/2, 150, 25, DARKGRAY);
     DrawTexture(texture,posx, posy, RAYWHITE);
-    DrawRectangle(width-MeasureText("EXIT",30)-70,925,MeasureText("EXIT",30)+40,50,DARKGRAY);
-    DrawText("EXIT",width-MeasureText("EXIT",30)-50,935, 30, BLACK); 
+
+    DrawRectangle(width-MeasureText("PAUSE",30)-70,925,MeasureText("PAUSE",30)+40,50,DARKGRAY);
+    DrawText("EXIT",width-MeasureText("PAUSE",30)-70+(MeasureText("PAUSE",30)+40)/2-(MeasureText("EXIT",30))/2,935, 30, BLACK);
+
+    DrawRectangle(width-MeasureText("PAUSE",30)-70,850,MeasureText("PAUSE",30)+40,50,DARKGRAY);
+    DrawText("PAUSE",width-MeasureText("PAUSE",30)-50,860, 30, BLACK); 
+
     if(GetKeyPressed()==KEY_ESCAPE)
     {
         CloseWindow();
+    }
+
+    if(paused==1)
+    {
+        PauseTimer=PauseTimer+GetFrameTime();
+        if(PauseTimer<1)
+        {
+            LastTimePausedIsShowed=PauseTimer;
+            DrawRectangle(width/2-MeasureText("PAUSED",150)/2-15,height/2-90,MeasureText("PAUSED",150)+30,175,MyLightOrange);
+            DrawText("PAUSED",width/2-MeasureText("PAUSED",150)/2,height/2-75,150, MyBlack);
+        }
+        else if(PauseTimer>=2*LastTimePausedIsShowed)
+        {
+            PauseTimer=0;
+        }
     }
     EndDrawing();
 }

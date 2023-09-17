@@ -5,7 +5,7 @@
 #include "board.hpp"
 
 
-void Draw(Board& board ,int Board_width,int Board_height,int CreateNew,int NumberNext,int width,int height) ;
+void Draw(Board& board ,int Board_width,int Board_height,int CreateNew,int NumberNext,int width,int height,int paused) ;
 int DrawStartWindow(int width,int height);
 
 #endif
