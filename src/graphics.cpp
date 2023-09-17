@@ -28,7 +28,7 @@ void Draw(Board& board,int Board_width,int Board_height,int CreateNew,int Number
     {
         image= LoadImage("images/T.png");
         ImageResize(&image, 150, 100);
-        posx=600;
+        posx=575;
         posy=200;
     }
     else if(NumberNext==3)
@@ -41,7 +41,7 @@ void Draw(Board& board,int Board_width,int Board_height,int CreateNew,int Number
     else if (NumberNext==4)
     {
         image= LoadImage("images/SandZ.png");
-        ImageResize(&image, 150, 100);
+        ImageResize(&image, 100, 150);
         posx=600;
         posy=200;
     }
@@ -75,27 +75,27 @@ void Draw(Board& board,int Board_width,int Board_height,int CreateNew,int Number
             else if(board.get_board()[y][x]==1)
             {
                 DrawRectangle(x * 50, y * 50+50, 50, 50,BLACK);
-                DrawRectangle(x * 50 +2, y * 50 +52, 46, 46,RED);
+                DrawRectangle(x * 50 +2, y * 50 +52, 46, 46,YELLOW);
             }
             else if(board.get_board()[y][x]==2)
             {
                 DrawRectangle(x * 50, y * 50+50, 50, 50,BLACK);
-                DrawRectangle(x * 50 +2, y * 50 +52, 46, 46,GREEN);
+                DrawRectangle(x * 50 +2, y * 50 +52, 46, 46,PURPLE);
             }
             else if(board.get_board()[y][x]==3)
             {
                 DrawRectangle(x * 50, y * 50+50, 50, 50,BLACK);
-                DrawRectangle(x * 50 +2, y * 50 +52, 46, 46,BLUE);
+                DrawRectangle(x * 50 +2, y * 50 +52, 46, 46,ORANGE);
             }
             else if(board.get_board()[y][x]==4)
             {
                 DrawRectangle(x * 50, y * 50+50, 50, 50,BLACK);
-                DrawRectangle(x * 50 +2, y * 50 +52, 46, 46,YELLOW);
+                DrawRectangle(x * 50 +2, y * 50 +52, 46, 46,GREEN);
             }
             else if(board.get_board()[y][x]==5)
             {
                 DrawRectangle(x * 50, y * 50+50, 50, 50,BLACK);
-                DrawRectangle(x * 50 +2, y * 50 +52, 46, 46,PURPLE);
+                DrawRectangle(x * 50 +2, y * 50 +52, 46, 46,CYAN);
             }
             if((board.get_board()[y][x]==0))
             {

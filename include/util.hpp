@@ -13,5 +13,6 @@
 #define MyOrange {255,153,51,255}
 #define MyGreen {102,255,102,255}
 #define MyDarkGreen {0,204,0,255}
+#define CYAN {0,255,255,255}
 
 #endif
