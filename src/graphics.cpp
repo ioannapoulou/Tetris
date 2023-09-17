@@ -116,6 +116,12 @@ void Draw(Board& board,int Board_width,int Board_height,int CreateNew,int Number
     }
     DrawText("Next Shape",650-MeasureText("Next Shape",25)/2, 150, 25, DARKGRAY);
     DrawTexture(texture,posx, posy, RAYWHITE);
+    DrawRectangle(width-MeasureText("EXIT",30)-70,925,MeasureText("EXIT",30)+40,50,DARKGRAY);
+    DrawText("EXIT",width-MeasureText("EXIT",30)-50,935, 30, BLACK); 
+    if(GetKeyPressed()==KEY_ESCAPE)
+    {
+        CloseWindow();
+    }
     EndDrawing();
 }
 
