@@ -253,11 +253,71 @@ void Board::move_left(int color)
 }
 
 
-int Board::move_up(int color,int form)
+
+
+
+int Board::move_up_straight(int color,int form,int Board_width,int Board_height)
 {
-    if(color==Straight)
+    if(form==0)
     {
-        if(form==0)
+        vector<tuple<int, int> > v;
+        v.push_back(posa);
+        v.push_back(posb);
+        v.push_back(posc);
+        v.push_back(posd);
+
+        sort(v.begin(), v.end(), sortbysec);
+
+        if( get<0>(v[0]) <=2 )
+        {
+            for (int i=0;i<4;i++)
+            {
+                b[get<0>(v[i])] [get<01>(v[i])]=0;
+                
+            }
+            for (int i=0;i<4;i++)
+            {
+                b[i] [get<01>(v[3])]=color;
+            }
+            tuple <int, int> help_tuple1,help_tuple2,help_tuple3,help_tuple4;
+
+            help_tuple1= make_tuple(0,get<01>(v[3]));
+            help_tuple2= make_tuple(1,get<01>(v[3]));
+            help_tuple3= make_tuple(2,get<01>(v[3]));
+            help_tuple4= make_tuple(3,get<01>(v[3]));
+
+            posa=help_tuple1;
+            posb=help_tuple2;
+            posc=help_tuple3;
+            posd=help_tuple4;
+        }
+
+
+        else 
+        {
+            for (int i=0;i<4;i++)
+            {
+                b[get<0>(v[i])] [get<01>(v[i])]=0;
+                b[get<0>(v[3])-i] [get<01>(v[3])]=color;
+            }
+            b[get<0>(v[3])] [get<01>(v[3])]=color;
+            tuple <int, int> help_tuple1,help_tuple2,help_tuple3,help_tuple4;
+
+            help_tuple1= make_tuple(get<0>(v[3])-3,get<01>(v[3]));
+            help_tuple2= make_tuple(get<0>(v[3])-2,get<01>(v[3]));
+            help_tuple3= make_tuple(get<0>(v[3])-1,get<01>(v[3]));
+            help_tuple4= make_tuple(get<0>(v[3]),get<01>(v[3]));
+
+            posa=help_tuple1;
+            posb=help_tuple2;
+            posc=help_tuple3;
+            posd=help_tuple4;
+        }
+        form=1;
+    }
+    else
+    {
+        if(get<01>(posa)<=Board_width-4)
         {
             vector<tuple<int, int> > v;
             v.push_back(posa);
@@ -265,63 +325,31 @@ int Board::move_up(int color,int form)
             v.push_back(posc);
             v.push_back(posd);
 
-            sort(v.begin(), v.end(), sortbysec);
-
-            if( get<0>(v[0]) <=2 )
+            sort(v.begin(), v.end(), sortdesc);
+            for (int i=0;i<4;i++)
             {
-                for (int i=0;i<4;i++)
-                {
-                    b[get<0>(v[i])] [get<01>(v[i])]=0;
-                    
-                }
-                for (int i=0;i<4;i++)
-                {
-                    b[i] [get<01>(v[3])]=color;
-                }
-                tuple <int, int> help_tuple1,help_tuple2,help_tuple3,help_tuple4;
-
-                help_tuple1= make_tuple(0,get<01>(v[3]));
-                help_tuple2= make_tuple(1,get<01>(v[3]));
-                help_tuple3= make_tuple(2,get<01>(v[3]));
-                help_tuple4= make_tuple(3,get<01>(v[3]));
-
-                posa=help_tuple1;
-                posb=help_tuple2;
-                posc=help_tuple3;
-                posd=help_tuple4;
+                b[get<0>(v[i])] [get<01>(v[i])]=0;
+                b[get<0>(v[0])] [get<01>(v[0])+i]=color;
             }
+            b[get<0>(v[0])] [get<01>(v[0])]=color;
+            tuple <int, int> help_tuple1,help_tuple2,help_tuple3,help_tuple4;
 
+            help_tuple1= make_tuple(get<0>(v[0]),get<01>(v[0]));
+            help_tuple2= make_tuple(get<0>(v[0]),get<01>(v[0])+1);
+            help_tuple3= make_tuple(get<0>(v[0]),get<01>(v[0])+2);
+            help_tuple4= make_tuple(get<0>(v[0]),get<01>(v[0])+3);
 
-            else 
-            {
-                for (int i=0;i<4;i++)
-                {
-                    b[get<0>(v[i])] [get<01>(v[i])]=0;
-                    b[get<0>(v[3])-i] [get<01>(v[3])]=color;
-                }
-                b[get<0>(v[3])] [get<01>(v[3])]=color;
-                tuple <int, int> help_tuple1,help_tuple2,help_tuple3,help_tuple4;
-
-                help_tuple1= make_tuple(get<0>(v[3])-3,get<01>(v[3]));
-                help_tuple2= make_tuple(get<0>(v[3])-2,get<01>(v[3]));
-                help_tuple3= make_tuple(get<0>(v[3])-1,get<01>(v[3]));
-                help_tuple4= make_tuple(get<0>(v[3]),get<01>(v[3]));
-
-                posa=help_tuple1;
-                posb=help_tuple2;
-                posc=help_tuple3;
-                posd=help_tuple4;
-            }
-            form=1;
-        }
-        else
-        {
-            
+            posa=help_tuple1;
+            posb=help_tuple2;
+            posc=help_tuple3;
+            posd=help_tuple4;
             form=0;
         }
     }
-    return form;;
+    return form;
 }
+
+
 
 
 int Board::get_pos1()

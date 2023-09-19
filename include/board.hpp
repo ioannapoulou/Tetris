@@ -23,8 +23,8 @@ class Board
         int move_down(int color);
         void move_right(int color);
         void move_left(int color);
-        int move_up(int color,int form);
         void set_board(int pos1,int pos2,int value);
+        int move_up_straight(int color,int form,int Board_width,int Board_height);
 };
 
 #endif

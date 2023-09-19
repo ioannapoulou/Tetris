@@ -25,13 +25,13 @@ int func(Board& b,int Board_width,int Board_height)
         form=0;
         if(number2==-1)
         {
-            number=rand() % 5 + 1;
-            number2=rand() % 5 + 1;
+            number=5;
+            number2=5;
         }
         else 
         {
             number=number2;
-            number2=rand() % 5 + 1;
+            number2=5;
         }
 
         int End=b.create_shape(number);
@@ -58,7 +58,10 @@ int func(Board& b,int Board_width,int Board_height)
     }
     if(up==1)
     {
-        form=b.move_up(number,form);
+        if(number==Straight)
+        {
+            form=b.move_up_straight(number,form,Board_width,Board_height);
+        }
         up=0;
     }
     if ((right==1) and ((b.get_pos2()+4<Board_width and number==Straight) or (b.get_pos2()+1<Board_width and number==Straight and form==1) or (number==Square and b.get_pos2()+2<Board_width) or (number==L and b.get_pos2()+2<Board_width) or (number==T and b.get_pos2()+3<Board_width) or (number==SandZ and b.get_pos2()+2<Board_width)))
