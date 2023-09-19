@@ -12,93 +12,158 @@ using namespace std;
 float PauseTimer=0;
 float LastTimePausedIsShowed=0;
 
-void Draw(Board& board,int Board_width,int Board_height,int CreateNew,int NumberNext,int width,int height,int paused)
-{    
-    BeginDrawing();
-    bool all_line;
-    Image image ;
-    int posx,posy;
-    ClearBackground(RAYWHITE);
+
+void Pause(int width,int height)
+{
+    
+    PauseTimer=PauseTimer+GetFrameTime();
+    if(PauseTimer<1)
+    {
+        LastTimePausedIsShowed=PauseTimer;
+        DrawRectangle(width/2-MeasureText("PAUSED",150)/2-15,height/2-90,MeasureText("PAUSED",150)+30,175,MyLightOrange);
+        DrawText("PAUSED",width/2-MeasureText("PAUSED",150)/2,height/2-75,150, MyBlack);
+    }
+    else if(PauseTimer>=2*LastTimePausedIsShowed)
+    {
+        PauseTimer=0;
+    }
+}
+
+
+void End(int width,int height)
+{
+    
+    PauseTimer=PauseTimer+GetFrameTime();
+    if(PauseTimer<1)
+    {
+        LastTimePausedIsShowed=PauseTimer;
+        DrawRectangle(width/2-MeasureText("GAME OVER",120)/2-15,height/2-90,MeasureText("GAME OVER",120)+30,175,MyLightRed);
+        DrawText("GAME OVER",width/2-MeasureText("GAME OVER",120)/2,height/2-75,120, MyBlack);
+    }
+    else if(PauseTimer>=2*LastTimePausedIsShowed)
+    {
+        PauseTimer=0;
+    }
+}
+
+
+Texture2D FindNextTexture(int NumberNext,Texture2D* textures)
+{
+
+    Texture2D texture;
+
     if(NumberNext==1)
     {
-        image = LoadImage("images/rectangle.png");
-        ImageResize(&image, 100, 100);
-        posx=600;
-        posy=200;
+        texture=textures[0];
     }
     else if(NumberNext==2)
     {
-        image= LoadImage("images/T.png");
-        ImageResize(&image, 150, 100);
-        posx=575;
-        posy=200;
+        texture=textures[1];
     }
     else if(NumberNext==3)
     {
-        image= LoadImage("images/L.png");
-        ImageResize(&image, 100, 150);
-        posx=600;
-        posy=200;
+        texture=textures[2];
     }
     else if (NumberNext==4)
     {
-        image= LoadImage("images/SandZ.png");
-        ImageResize(&image, 100, 150);
-        posx=600;
-        posy=200;
+        texture=textures[3];
     }
     else if(NumberNext==5)
     {
-        image= LoadImage("images/straight.png");
-        ImageResize(&image, 200, 50);
-        posx=550;
-        posy=200;
+        texture=textures[4];
     }
-    Texture2D texture = LoadTextureFromImage(image);
+    return texture;
+}
 
-    // Resize the image if needed
-    
-    
+int* FindPosOfNextShape(int NumberNext,int* pos)
+{
+    if(NumberNext==1)
+    {
+        pos[0]=600;
+        pos[1]=200;
+    }
+    else if(NumberNext==2)
+    {
+        pos[0]=575;
+        pos[1]=200;
+    }
+    else if(NumberNext==3)
+    {
+        pos[0]=600;
+        pos[1]=200;
+    }
+    else if (NumberNext==4)
+    {
+        pos[0]=600;
+        pos[1]=200;
+    }
+    else if(NumberNext==5)
+    {
+        pos[0]=550;
+        pos[1]=200;
+    }
+    return pos;
+}
 
-    // Unload the previous texture and create a new one from the resized image
-    UnloadTexture(texture);
-    texture = LoadTextureFromImage(image);
+
+void DrawBoard(int x,int y,Board& board)
+{
+    if(board.get_board()[y][x]==0)
+    {
+        DrawRectangle(x * 50, y * 50+50, 50, 50,BLACK);
+        DrawRectangle(x * 50 +2, y * 50 +52, 46, 46,WHITE);
+    }
+    else if(board.get_board()[y][x]==1)
+    {
+        DrawRectangle(x * 50, y * 50+50, 50, 50,BLACK);
+        DrawRectangle(x * 50 +2, y * 50 +52, 46, 46,YELLOW);
+    }
+    else if(board.get_board()[y][x]==2)
+    {
+        DrawRectangle(x * 50, y * 50+50, 50, 50,BLACK);
+        DrawRectangle(x * 50 +2, y * 50 +52, 46, 46,PURPLE);
+    }
+    else if(board.get_board()[y][x]==3)
+    {
+        DrawRectangle(x * 50, y * 50+50, 50, 50,BLACK);
+        DrawRectangle(x * 50 +2, y * 50 +52, 46, 46,ORANGE);
+    }
+    else if(board.get_board()[y][x]==4)
+    {
+        DrawRectangle(x * 50, y * 50+50, 50, 50,BLACK);
+        DrawRectangle(x * 50 +2, y * 50 +52, 46, 46,GREEN);
+    }
+    else if(board.get_board()[y][x]==5)
+    {
+        DrawRectangle(x * 50, y * 50+50, 50, 50,BLACK);
+        DrawRectangle(x * 50 +2, y * 50 +52, 46, 46,CYAN);
+    }
+    
+}
+
+
+void Draw(Board& board,int Board_width,int Board_height,int CreateNew,int NumberNext,int width,int height,int paused,int end,Texture2D* textures)
+{    
+    BeginDrawing();
+    bool all_line;
+    int posx,posy;
+    ClearBackground(RAYWHITE);
+    Texture2D texture;
+    
+    texture=FindNextTexture(NumberNext,textures);
+
+    int * pos = new int[2];
+    pos=FindPosOfNextShape(NumberNext,pos);
+    posx=pos[0];
+    posy=pos[1];
+    delete pos;
 
     for (int y = 0; y < Board_height; y++) {
         all_line=true;
         for (int x = 0; x < Board_width; x++) 
         {
             DrawText(TextFormat("Score: %d", board.get_score()), 0, 0, 40, DARKGRAY);
-            if(board.get_board()[y][x]==0)
-            {
-                DrawRectangle(x * 50, y * 50+50, 50, 50,BLACK);
-                DrawRectangle(x * 50 +2, y * 50 +52, 46, 46,WHITE);
-            }
-            else if(board.get_board()[y][x]==1)
-            {
-                DrawRectangle(x * 50, y * 50+50, 50, 50,BLACK);
-                DrawRectangle(x * 50 +2, y * 50 +52, 46, 46,YELLOW);
-            }
-            else if(board.get_board()[y][x]==2)
-            {
-                DrawRectangle(x * 50, y * 50+50, 50, 50,BLACK);
-                DrawRectangle(x * 50 +2, y * 50 +52, 46, 46,PURPLE);
-            }
-            else if(board.get_board()[y][x]==3)
-            {
-                DrawRectangle(x * 50, y * 50+50, 50, 50,BLACK);
-                DrawRectangle(x * 50 +2, y * 50 +52, 46, 46,ORANGE);
-            }
-            else if(board.get_board()[y][x]==4)
-            {
-                DrawRectangle(x * 50, y * 50+50, 50, 50,BLACK);
-                DrawRectangle(x * 50 +2, y * 50 +52, 46, 46,GREEN);
-            }
-            else if(board.get_board()[y][x]==5)
-            {
-                DrawRectangle(x * 50, y * 50+50, 50, 50,BLACK);
-                DrawRectangle(x * 50 +2, y * 50 +52, 46, 46,CYAN);
-            }
+            DrawBoard(x,y,board);
             if((board.get_board()[y][x]==0))
             {
                 all_line=false;
@@ -129,38 +194,16 @@ void Draw(Board& board,int Board_width,int Board_height,int CreateNew,int Number
     {
         CloseWindow();
     }
-
     if(paused==1)
-    {
-        PauseTimer=PauseTimer+GetFrameTime();
-        if(PauseTimer<1)
-        {
-            LastTimePausedIsShowed=PauseTimer;
-            DrawRectangle(width/2-MeasureText("PAUSED",150)/2-15,height/2-90,MeasureText("PAUSED",150)+30,175,MyLightOrange);
-            DrawText("PAUSED",width/2-MeasureText("PAUSED",150)/2,height/2-75,150, MyBlack);
-        }
-        else if(PauseTimer>=2*LastTimePausedIsShowed)
-        {
-            PauseTimer=0;
-        }
-    }
+        Pause(width,height);
+    if(end==1)
+        End(width,height);
     EndDrawing();
 }
 
-int DrawStartWindow(int width,int height)
+int DrawStartWindow(int width,int height,Texture2D texture)
 {
     int result=GetKeyPressed();
-    Image image = LoadImage("images/shapes.png");
-    Texture2D texture = LoadTextureFromImage(image);
-
-    // Resize the image if needed
-    int newWidth = 450; // Set the new width you want
-    int newHeight = 450; // Set the new height you want
-    ImageResize(&image, newWidth, newHeight);
-
-    // Unload the previous texture and create a new one from the resized image
-    UnloadTexture(texture);
-    texture = LoadTextureFromImage(image);
     while (result!=KEY_ENTER and result!=KEY_ESCAPE) 
     {
         BeginDrawing();
@@ -218,5 +261,7 @@ int DrawStartWindow(int width,int height)
     }
     return 0;
 }
+
+
 
 

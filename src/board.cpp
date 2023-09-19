@@ -26,7 +26,7 @@ Board::Board(int width,int height)
  
 }
 
-void Board::create_shape(int color)
+int Board::create_shape(int color)
 {
     if(color==Straight and b[0][2]==0 and b[0][3]==0 and  b[0][4]==0 and b[0][5]==0)
     {
@@ -84,6 +84,11 @@ void Board::create_shape(int color)
         b[1][3]=SandZ;
         b[2][3]=SandZ;
     }  
+    else
+    {
+        return 1;
+    }
+    return 0;
 }
 
 
