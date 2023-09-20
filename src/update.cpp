@@ -25,13 +25,13 @@ int func(Board& b,int Board_width,int Board_height)
         form=0;
         if(number2==-1)
         {
-            number=5;
-            number2=5;
+            number=3;
+            number2=3;
         }
         else 
         {
             number=number2;
-            number2=5;
+            number2=3;
         }
 
         int End=b.create_shape(number);
@@ -47,14 +47,30 @@ int func(Board& b,int Board_width,int Board_height)
     else if(CreateNew==1)
     {
         result=b.move_down(number);
-        if((b.get_pos1()>=Board_height-1 and number==Straight and form==0) or (b.get_pos1()>=Board_height-4 and number==Straight and form==1) or (number==Square and b.get_pos1()>=Board_height-2) or (number==L and b.get_pos1()>=Board_height-3) or (number==T and b.get_pos1()>=Board_height-2) or (number==SandZ and b.get_pos1()>=Board_height-3))
+        if(number==Straight)
         {
-            CreateNew=0;
+            if ( (b.get_pos1()>=Board_height-1 and form==0) or (b.get_pos1()>=Board_height-4 and form==1) )
+            {
+                CreateNew=0;
+            }
+            if(result==1)
+            {
+                CreateNew=0;
+            }
         }
-        if(result==1)
+
+        if(number==L)
         {
-            CreateNew=0;
+            if ( (b.get_pos1()>=Board_height-3 and form==0) or (b.get_pos1()>=Board_height-1 and form==1) or (b.get_pos1()>=Board_height-1 and form==2) or (b.get_pos1()>=Board_height-2 and form==3) )
+            {
+                CreateNew=0;
+            }
+            if(result==1)
+            {
+                CreateNew=0;
+            }
         }
+
     }
     if(up==1)
     {
@@ -62,17 +78,47 @@ int func(Board& b,int Board_width,int Board_height)
         {
             form=b.move_up_straight(number,form,Board_width,Board_height);
         }
+        else if(number==L)
+        {
+            form=b.move_up_L(number,form,Board_width,Board_height);
+        }
         up=0;
     }
-    if ((right==1) and ((b.get_pos2()+4<Board_width and number==Straight) or (b.get_pos2()+1<Board_width and number==Straight and form==1) or (number==Square and b.get_pos2()+2<Board_width) or (number==L and b.get_pos2()+2<Board_width) or (number==T and b.get_pos2()+3<Board_width) or (number==SandZ and b.get_pos2()+2<Board_width)))
+    if  (right==1)
     {
-        b.move_right(number);
-        right=0;
-    }
-    else if ((left==1) and b.get_pos2()-1>=0)
+        if(number==Straight)
+        {
+            if( (b.get_pos2()+4<Board_width and form==0) or (b.get_pos2()+1<Board_width and form==1) )
+            {
+                b.move_right(number);
+                right=0;
+            }
+        }
+        else if(number==L)
+        {
+            if( (b.get_pos2()+2<Board_width and form==0) or (b.get_pos2()+3<Board_width and form==1)  or (b.get_pos2()+1<Board_width and form==2) or (b.get_pos2()+3<Board_width and form==3) )
+            {
+                b.move_right(number);
+                right=0;
+            }
+        }
+    } 
+    
+    else if (left==1)
     {
-        b.move_left(number);
-        left=0;
+        if(number==Straight and b.get_pos2()-1>=0)
+        {
+            b.move_left(number);
+            left=0;
+        }
+        else if(number==L)
+        {
+            if( (b.get_pos2()-1>=0 and form==0) or (b.get_pos2()-1>=0 and form==1) or (b.get_pos2()-2>=0 and form==2) or (b.get_pos2()-1>=0 and form==3))
+            {
+                b.move_left(number);
+                left=0;
+            }
+        }
     }    
     return 0;
 }
@@ -125,3 +171,9 @@ int* Update(Board& b,int Board_width,int Board_height,int first_time)
 }
 
 
+
+
+
+// or (number==Square and b.get_pos1()>=Board_height-2) or (number==L and b.get_pos1()>=Board_height-3 and form==0) or (number==L and b.get_pos1()>=Board_height-1 and form==1) or (number==L and b.get_pos1()>=Board_height-1 and form==2)or (number==T and b.get_pos1()>=Board_height-2) or (number==SandZ and b.get_pos1()>=Board_height-3))
+// or (number==Square and b.get_pos2()+2<Board_width) or (number==L and b.get_pos2()+2<Board_width) or(number==L and form==1 and b.get_pos2()+3<Board_width) or (number==T and b.get_pos2()+3<Board_width) or (number==SandZ and b.get_pos2()+2<Board_width)))
+// (  (left==1) and ((number!=L and b.get_pos2()-1>=0) or (b.get_pos2()-2>=0 and form==2 and number==L)  or (number==L and form!=2 and b.get_pos2()-1>=0)) ) 

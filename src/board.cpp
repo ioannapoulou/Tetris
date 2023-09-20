@@ -350,6 +350,147 @@ int Board::move_up_straight(int color,int form,int Board_width,int Board_height)
 }
 
 
+int Board::move_up_L(int color,int form,int Board_width,int Board_height)
+{
+    if(form==0)
+    {
+        vector<tuple<int, int> > v;
+        v.push_back(posa);
+        v.push_back(posb);
+        v.push_back(posc);
+        v.push_back(posd);
+
+        sort(v.begin(), v.end(), sortdesc);
+
+        if(get<01>(v[0])>get<01>(v[1]))
+        {
+            tuple<int, int> temp;
+            temp=v[0];
+            v[0]=v[1];
+            v[1]=temp;
+        }
+
+
+        if(get<01>(v[0])<=Board_width-3)
+        {
+            for (int i=0;i<4;i++)
+            {
+                b[get<0>(v[i])] [get<01>(v[i])]=0;
+            }
+            for (int i=0;i<3;i++)
+            {
+                b[get<0>(v[0])] [get<01>(v[0])+i]=color;
+            }
+            b[get<0>(v[0])-1] [get<01>(v[0])+2]=color;
+            tuple <int, int> help_tuple1,help_tuple2,help_tuple3,help_tuple4;
+
+            help_tuple1= make_tuple(get<0>(v[0]),get<01>(v[0]));
+            help_tuple2= make_tuple(get<0>(v[0]),get<01>(v[0])+1);
+            help_tuple3= make_tuple(get<0>(v[0]),get<01>(v[0])+2);
+            help_tuple4= make_tuple(get<0>(v[0])-1,get<01>(v[0])+2);
+
+            posa=help_tuple1;
+            posb=help_tuple2;
+            posc=help_tuple3;
+            posd=help_tuple4;
+
+            form=1;
+        }
+    }
+    else if(form==1)
+    {
+        if(get<01>(posa)>=1)
+        {
+            
+
+            b[get<0>(posb)] [get<01>(posb)]=0;
+            b[get<0>(posc)] [get<01>(posc)]=0;
+            b[get<0>(posd)] [get<01>(posd)]=0;
+
+
+            b[get<0>(posa)-1] [get<01>(posa)]=color;
+            b[get<0>(posa)-2] [get<01>(posa)]=color;
+            b[get<0>(posa)-2] [get<01>(posa)-1]=color;
+
+
+            tuple <int, int> help_tuple1,help_tuple2,help_tuple3,help_tuple4;
+
+            help_tuple1= make_tuple(get<0>(posa),get<01>(posa));
+            help_tuple2= make_tuple(get<0>(posa)-1,get<01>(posa));
+            help_tuple3= make_tuple(get<0>(posa)-2,get<01>(posa));
+            help_tuple4= make_tuple(get<0>(posa)-2,get<01>(posa)-1);
+
+            posa=help_tuple1;
+            posb=help_tuple2;
+            posc=help_tuple3;
+            posd=help_tuple4;
+            form=2;
+        }
+    }
+    else if(form==2)
+    {
+        if(get<01>(posa)>=2)
+        {
+            b[get<0>(posb)] [get<01>(posb)]=0;
+            b[get<0>(posc)] [get<01>(posc)]=0;
+            b[get<0>(posd)] [get<01>(posd)]=0;
+            b[get<0>(posa)] [get<01>(posa)]=0;
+
+             b[get<0>(posa)-1] [get<01>(posa)]=color;
+            b[get<0>(posa)-1] [get<01>(posa)-1]=color;
+            b[get<0>(posa)-1] [get<01>(posa)-2]=color;
+            b[get<0>(posa)] [get<01>(posa)-2]=color;
+            
+
+            tuple <int, int> help_tuple1,help_tuple2,help_tuple3,help_tuple4;
+
+            help_tuple1= make_tuple( get<0>(posa)-1,get<01>(posa) );
+            help_tuple2= make_tuple( get<0>(posa)-1,get<01>(posa) -1 );
+            help_tuple3= make_tuple(get<0>(posa)-1,get<01>(posa) -2 );
+            help_tuple4= make_tuple(get<0>(posa) ,get<01>(posa)-2);
+
+
+            posa=help_tuple3;
+            posb=help_tuple2;
+            posc=help_tuple1;
+            posd=help_tuple4;
+            form=3;
+        }
+    }
+    else if(form==3)
+    {
+        
+        b[get<0>(posb)] [get<01>(posb)]=0;
+        b[get<0>(posc)] [get<01>(posc)]=0;
+        b[get<0>(posd)] [get<01>(posd)]=0;
+        b[get<0>(posa)] [get<01>(posa)]=0;
+
+        b[get<0>(posa)-1] [get<01>(posa)]=color;
+        b[get<0>(posa)+1] [get<01>(posa)]=color;
+        b[get<0>(posa)+1] [get<01>(posa)+1]=color;
+        b[get<0>(posa)] [get<01>(posa)]=color;
+        
+
+        tuple <int, int> help_tuple1,help_tuple2,help_tuple3,help_tuple4;
+
+        help_tuple1= make_tuple( get<0>(posa)-1,get<01>(posa) );
+        help_tuple2= make_tuple( get<0>(posa)+1,get<01>(posa) );
+        help_tuple3= make_tuple(get<0>(posa)+1,get<01>(posa) +1 );
+        help_tuple4= make_tuple(get<0>(posa) ,get<01>(posa));
+
+
+        posa=help_tuple1;
+        posb=help_tuple3;
+        posc=help_tuple2;
+        posd=help_tuple4;
+        form=0;
+        
+        return form;
+    }
+    return form;
+}
+
+
 
 
 int Board::get_pos1()
