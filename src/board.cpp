@@ -491,6 +491,70 @@ int Board::move_up_L(int color,int form,int Board_width,int Board_height)
 }
 
 
+int Board::move_up_SandZ(int color,int form,int Board_width,int Board_height)
+{
+    if(form==0)
+    {
+        if(get<01>(posa)<=Board_width-3) 
+        {
+            
+
+            b[get<0>(posb)] [get<01>(posb)]=0;
+            b[get<0>(posc)] [get<01>(posc)]=0;
+            b[get<0>(posd)] [get<01>(posd)]=0;
+            b[get<0>(posa)] [get<01>(posa)]=0;
+
+            b[get<0>(posa)+1] [get<01>(posa)+1]=color;
+            b[get<0>(posa)+1] [get<01>(posa)+2]=color;
+            b[get<0>(posa)+2] [get<01>(posa)]=color;
+            b[get<0>(posa)+2] [get<01>(posa)+1]=color;
+
+
+            tuple <int, int> help_tuple1,help_tuple2,help_tuple3,help_tuple4;
+
+            help_tuple1= make_tuple( get<0>(posa)+1,get<01>(posa) +1 );
+            help_tuple2= make_tuple( get<0>(posa)+1,get<01>(posa) +2);
+            help_tuple3= make_tuple(get<0>(posa)+2,get<01>(posa) );
+            help_tuple4= make_tuple(get<0>(posa)+2 ,get<01>(posa)+1);
+
+            posa=help_tuple3;
+            posb=help_tuple2;
+            posc=help_tuple1;
+            posd=help_tuple4;
+
+            form=1;
+        }
+    }
+    else if(form==1)
+    {
+        b[get<0>(posa)] [get<01>(posa)]=0;
+        b[get<0>(posb)] [get<01>(posb)]=0;
+        b[get<0>(posc)] [get<01>(posc)]=0;
+        b[get<0>(posd)] [get<01>(posd)]=0;
+
+        b[get<0>(posa)] [get<01>(posa)+1]=color;
+        b[get<0>(posa)-1] [get<01>(posa)]=color;
+        b[get<0>(posa)-2] [get<01>(posa)]=color;
+        b[get<0>(posa)-1] [get<01>(posa)+1]=color;
+
+
+        tuple <int, int> help_tuple1,help_tuple2,help_tuple3,help_tuple4;
+
+        help_tuple1= make_tuple( get<0>(posa),get<01>(posa) +1 );
+        help_tuple2= make_tuple( get<0>(posa)-1,get<01>(posa));
+        help_tuple3= make_tuple(get<0>(posa)-2,get<01>(posa) );
+        help_tuple4= make_tuple(get<0>(posa)-1 ,get<01>(posa)+1);
+
+        posa=help_tuple3;
+        posb=help_tuple2;
+        posc=help_tuple1;
+        posd=help_tuple4;
+        form=0;
+    }
+    return form;
+}
+
+
 
 
 int Board::get_pos1()

@@ -25,13 +25,13 @@ int func(Board& b,int Board_width,int Board_height)
         form=0;
         if(number2==-1)
         {
-            number=3;
-            number2=3;
+            number=4;
+            number2=4;
         }
         else 
         {
             number=number2;
-            number2=3;
+            number2=4;
         }
 
         int End=b.create_shape(number);
@@ -70,6 +70,17 @@ int func(Board& b,int Board_width,int Board_height)
                 CreateNew=0;
             }
         }
+        if(number==SandZ)
+        {
+            if( ( (b.get_pos1()>=Board_height-3) and (form==0) ) or ( (b.get_pos1()>=Board_height-1) and (form==1) ) )
+            {
+                CreateNew=0;
+            }
+            if(result==1)
+            {
+                CreateNew=0;
+            }
+        }
 
     }
     if(up==1)
@@ -81,6 +92,10 @@ int func(Board& b,int Board_width,int Board_height)
         else if(number==L)
         {
             form=b.move_up_L(number,form,Board_width,Board_height);
+        }
+        else if(number==SandZ)
+        {
+            form=b.move_up_SandZ(number,form,Board_width,Board_height);
         }
         up=0;
     }
@@ -102,6 +117,14 @@ int func(Board& b,int Board_width,int Board_height)
                 right=0;
             }
         }
+        else if(number==SandZ)
+        {
+            if( (b.get_pos2()+2<Board_width and form==0) or (b.get_pos2()+3<Board_width and form==1)  )
+            {
+                b.move_right(number);
+                right=0;
+            }
+        }
     } 
     
     else if (left==1)
@@ -114,6 +137,14 @@ int func(Board& b,int Board_width,int Board_height)
         else if(number==L)
         {
             if( (b.get_pos2()-1>=0 and form==0) or (b.get_pos2()-1>=0 and form==1) or (b.get_pos2()-2>=0 and form==2) or (b.get_pos2()-1>=0 and form==3))
+            {
+                b.move_left(number);
+                left=0;
+            }
+        }
+        else if(number==SandZ)
+        {
+            if (b.get_pos2()-1>=0)
             {
                 b.move_left(number);
                 left=0;
