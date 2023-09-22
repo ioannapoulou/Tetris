@@ -25,13 +25,13 @@ int func(Board& b,int Board_width,int Board_height)
         form=0;
         if(number2==-1)
         {
-            number=4;
-            number2=4;
+            number=rand()%5 +1;
+            number2=rand()%5 +1;
         }
         else 
         {
             number=number2;
-            number2=4;
+            number2=rand()%5 +1;
         }
 
         int End=b.create_shape(number);
@@ -59,7 +59,7 @@ int func(Board& b,int Board_width,int Board_height)
             }
         }
 
-        if(number==L)
+        else if(number==L)
         {
             if ( (b.get_pos1()>=Board_height-3 and form==0) or (b.get_pos1()>=Board_height-1 and form==1) or (b.get_pos1()>=Board_height-1 and form==2) or (b.get_pos1()>=Board_height-2 and form==3) )
             {
@@ -70,9 +70,31 @@ int func(Board& b,int Board_width,int Board_height)
                 CreateNew=0;
             }
         }
-        if(number==SandZ)
+        else if(number==SandZ)
         {
             if( ( (b.get_pos1()>=Board_height-3) and (form==0) ) or ( (b.get_pos1()>=Board_height-1) and (form==1) ) )
+            {
+                CreateNew=0;
+            }
+            if(result==1)
+            {
+                CreateNew=0;
+            }
+        }
+        else if(number==Square)
+        {
+            if(b.get_pos1()>=Board_height-2)
+            {
+                CreateNew=0;
+            }
+            if(result==1)
+            {
+                CreateNew=0;
+            }
+        }
+        else if(number==T)
+        {
+            if( ( (b.get_pos1()>=Board_height-2) and (form==0) ) or ( (b.get_pos1()>=Board_height-3) and (form==1) )   or ( (b.get_pos1()>=Board_height-1) and (form==2) )  or ( (b.get_pos1()>=Board_height-3) and (form==3) )   ) 
             {
                 CreateNew=0;
             }
@@ -96,6 +118,10 @@ int func(Board& b,int Board_width,int Board_height)
         else if(number==SandZ)
         {
             form=b.move_up_SandZ(number,form,Board_width,Board_height);
+        }
+        else if(number==T)
+        {
+            form=b.move_up_T(number,form,Board_width,Board_height);
         }
         up=0;
     }
@@ -125,11 +151,27 @@ int func(Board& b,int Board_width,int Board_height)
                 right=0;
             }
         }
+        else if(number==Square)
+        {
+            if( b.get_pos2()+2<Board_width )
+            {
+                b.move_right(number);
+                right=0;
+            }
+        }
+        else if(number==T)
+        {
+            if( ( (b.get_pos2()+3<Board_width) and (form==0) ) or ( (b.get_pos2()+2<Board_width) and (form==1 ) )  or ( (b.get_pos2()+3<Board_width) and (form==2 ) )  or ( (b.get_pos2()+1<Board_width) and (form==3 ) )  )  
+            {
+                b.move_right(number);
+                right=0;
+            }
+        }
     } 
     
     else if (left==1)
     {
-        if(number==Straight and b.get_pos2()-1>=0)
+        if( ( (number==Straight) or(number==Square) or(number==SandZ) ) and (b.get_pos2()-1>=0) )
         {
             b.move_left(number);
             left=0;
@@ -142,9 +184,9 @@ int func(Board& b,int Board_width,int Board_height)
                 left=0;
             }
         }
-        else if(number==SandZ)
+        else if(number==T)
         {
-            if (b.get_pos2()-1>=0)
+            if( (b.get_pos2()-1>=0 and form==0) or (b.get_pos2()-1>=0 and form==1) or (b.get_pos2()-1>=0 and form==2) or (b.get_pos2()-2>=0 and form==3))
             {
                 b.move_left(number);
                 left=0;
