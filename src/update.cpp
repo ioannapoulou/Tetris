@@ -225,16 +225,33 @@ int* Update(Board& b,int Board_width,int Board_height,int first_time)
     }
     else
     {
-        if(timer>=0.2 and down==1)
+        if(b.get_score()<1500)
         {
-            down=0;
-            End=func(b,Board_width,Board_height);
-            timer=0;
+            if(timer>=0.2 and down==1)
+            {
+                down=0;
+                End=func(b,Board_width,Board_height);
+                timer=0;
+            }
+            else if(timer>=0.5 and down==0)
+            {
+                End=func(b,Board_width,Board_height);
+                timer=0;
+            }
         }
-        else if(timer>=0.5 and down==0)
+        else
         {
-            End=func(b,Board_width,Board_height);
-            timer=0;
+            if(timer>=0.1 and down==1)
+            {
+                down=0;
+                End=func(b,Board_width,Board_height);
+                timer=0;
+            }
+            else if(timer>=0.3 and down==0)
+            {
+                End=func(b,Board_width,Board_height);
+                timer=0;
+            }
         }
     }
     result[0]=CreateNew;
